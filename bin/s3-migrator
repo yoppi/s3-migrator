@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+require_relative "../lib/s3/migrator"
+
+opts = {}
+OptionParser.new { |o|
+  o.banner = "Usage: s3-migrator.rb [options]"
+  o.on("-i", "--access-key-id, AWS_ACCESS_KEY_ID") { |v| opts[:access_key_id] = v }
+  o.on("-k", "--secret-access-key AWS_SECRET_ACCESS_KEY") { |v| opts[:secret_access_key] = v }
+  o.on("-r", "--region REGEION") { |v| opts[:region] = v }
+  o.on("-s", "--src-bucket SOURCE_BUCKET") { |v| opts[:src_bucket] = v }
+  o.on("-d", "--dest-bucket DESTINATION_BUCKET", ) { |v| opts[:dest_bucket] = v }
+  o.on("-p", "--prefix [PREFIX]") { |v| opts[:prefix] = v }
+  o.on("-t", "--thread [COUNT]") { |v| opts[:thread_count] = v }
+}.parse!(ARGV)
+
+S3::Migrator.migrate!(opts)
