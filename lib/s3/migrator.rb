@@ -13,8 +13,17 @@ module S3
     DEFAULT_THREAD_COUNT = 10
 
     def migrate!(opts)
-      creds = Aws::Credentials.new(opts[:access_key_id], opts[:secret_access_key])
-      s3_client = Aws::S3::Client.new(credentials: creds, region: opts[:region])
+      # use ~/.aws/credentials if without credentials opts
+      creds = if opts[:profile]
+        Aws::SharedCredentials.new(profile_name: opts[:profile])
+      elsif opts[:access_key_id] && opts[:secret_access_key]
+        Aws::Credentials.new(opts[:access_key_id], opts[:secret_access_key])
+      end
+
+      client_opts = { region: opts[:region] || ENV['AWS_REGION'] }
+      client_opts[:credentials] = creds if creds
+
+      s3_client = Aws::S3::Client.new(client_opts)
 
       pagerble = if opts[:prefix]
         s3_client.list_objects(bucket: opts[:src_bucket], prefix: opts[:prefix])

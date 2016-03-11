@@ -10,6 +10,7 @@ OptionParser.new { |o|
   o.on("-s", "--src-bucket SOURCE_BUCKET") { |v| opts[:src_bucket] = v }
   o.on("-d", "--dest-bucket DESTINATION_BUCKET", ) { |v| opts[:dest_bucket] = v }
   o.on("-p", "--prefix [PREFIX]") { |v| opts[:prefix] = v }
+  o.on("--profile [AWS PROFILE]") { |v| opts[:profile] = v }
   o.on("-t", "--thread [COUNT]") { |v| opts[:thread_count] = v }
 }.parse!(ARGV)
 
