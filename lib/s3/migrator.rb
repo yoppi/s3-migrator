@@ -34,7 +34,7 @@ module S3
       logger = Logger.new(STDOUT)
 
       begin
-        each_in_threads(opts[:thread_count] || DEFAULT_THREAD_COUNT, pagerble.contents) do |obj|
+        each_in_threads(opts[:thread_count].to_i || DEFAULT_THREAD_COUNT, pagerble.contents) do |obj|
           begin
             s3_client.copy_object(
               bucket: opts[:dest_bucket],
